@@ -1,30 +1,38 @@
 import React, { useState } from "react";
-import "./styles.css";
 
-const useInput = (init, valid) => {
-  const [value, setValue] = useState(init);
-  const onChange = e => {
-    const {
-      target: { value }
-    } = e;
-    let update = true;
-    if (typeof valid === "function") {
-      update = valid(value);
-    }
-    if (update) {
-      setValue(value);
-    }
+const content = [
+  {
+    name: "section1",
+    content: "The text of the section1"
+  },
+  {
+    name: "section2",
+    content: "The text of the section2"
+  }
+];
+
+const useInput = (init, tabs) => {
+  const [index, setindex] = useState(init);
+  return {
+    contentText: tabs[index],
+    changeitem: setindex
   };
-  return { value, onChange };
 };
 
 const App = () => {
-  const Maxlength = value => value.length <= 10;
-  const name = useInput("Mr.", Maxlength);
+  const { contentText, changeitem } = useInput(0, content);
   return (
     <div className="App">
-      <h1>Hello</h1>
-      <input placeholder="Name" {...name} />
+      {content.map((section, index) => (
+        <button
+          onClick={() => {
+            changeitem(index);
+          }}
+        >
+          {section.name}
+        </button>
+      ))}
+      <div>{contentText.content}</div>
     </div>
   );
 };
